@@ -695,6 +695,9 @@ private:
     void Log_Write_IMU();
     void Log_Write_RC(void);
     void Log_Write_Baro(void);
+
+    void Log_Write_MyLog(void);
+
     void Log_Write_Airspeed(void);
     void Log_Read(uint16_t log_num, int16_t start_page, int16_t end_page);
     void start_logging();

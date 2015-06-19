@@ -283,6 +283,8 @@ void Plane::one_second_loop()
     if (should_log(MASK_LOG_CURRENT))
         Log_Write_Current();
 
+    Log_Write_MyLog();
+
     // send a heartbeat
     gcs_send_message(MSG_HEARTBEAT);
 

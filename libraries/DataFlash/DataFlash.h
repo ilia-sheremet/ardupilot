@@ -72,6 +72,9 @@ public:
     void Log_Write_RCIN(void);
     void Log_Write_RCOUT(void);
     void Log_Write_Baro(AP_Baro &baro);
+
+    void Log_Write_My_log(AP_Baro &baro);
+
     void Log_Write_Power(void);
     void Log_Write_AHRS2(AP_AHRS &ahrs);
     void Log_Write_POS(AP_AHRS &ahrs);
@@ -286,6 +289,12 @@ struct PACKED log_BARO {
     float   pressure;
     int16_t temperature;
     float   climbrate;
+};
+
+struct PACKED log_MYLOG {
+	LOG_PACKET_HEADER;
+    uint64_t time_us;
+	float   altitude;
 };
 
 struct PACKED log_AHRS {
@@ -802,6 +811,8 @@ Format characters in the format string for binary log messages
 #define LOG_IMUDT_MSG     184
 #define LOG_IMUDT2_MSG    185
 #define LOG_IMUDT3_MSG    186
+#define LOG_IMUDT3_MSG    186
+#define LOG_MY_MSG        191
 
 // message types 200 to 210 reversed for GPS driver use
 // message types 211 to 220 reversed for autotune use

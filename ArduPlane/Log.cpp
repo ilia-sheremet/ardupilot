@@ -466,6 +466,11 @@ void Plane::Log_Write_Baro(void)
     DataFlash.Log_Write_Baro(barometer);
 }
 
+void Plane::Log_Write_MyLog(void)
+{
+    DataFlash.Log_Write_My_log(barometer);
+}
+
 // Write a AIRSPEED packet
 void Plane::Log_Write_Airspeed(void)
 {
