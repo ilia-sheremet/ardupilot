@@ -807,7 +807,7 @@ void DataFlash_Class::Log_Write_My_log(AP_Baro &baro)
 	 struct log_MYLOG pkt = {
 	        LOG_PACKET_HEADER_INIT(LOG_MY_MSG),
 	        time_us       : time_us,
-	        altitude      : (baro.get_altitude(0) + 10)
+	        pressure      : baro.get_pressure(0)
 	    };
 	    WriteBlock(&pkt, sizeof(pkt));
 }

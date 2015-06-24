@@ -283,7 +283,7 @@ void Plane::one_second_loop()
     if (should_log(MASK_LOG_CURRENT))
         Log_Write_Current();
 
-    Log_Write_MyLog();
+    //Log_Write_MyLog();
 
     // send a heartbeat
     gcs_send_message(MSG_HEARTBEAT);
@@ -780,6 +780,8 @@ void Plane::set_flight_stage(AP_SpdHgtControl::FlightStage fs)
 void Plane::update_alt()
 {
     barometer.update();
+    Log_Write_MyLog();
+
     if (should_log(MASK_LOG_IMU)) {
         Log_Write_Baro();
     }

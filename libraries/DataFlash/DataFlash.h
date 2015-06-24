@@ -294,7 +294,7 @@ struct PACKED log_BARO {
 struct PACKED log_MYLOG {
 	LOG_PACKET_HEADER;
     uint64_t time_us;
-	float   altitude;
+	float   pressure;
 };
 
 struct PACKED log_AHRS {
@@ -639,6 +639,8 @@ Format characters in the format string for binary log messages
       "RCOU",  "Qhhhhhhhhhhhh",     "TimeUS,Ch1,Ch2,Ch3,Ch4,Ch5,Ch6,Ch7,Ch8,Ch9,Ch10,Ch11,Ch12" }, \
     { LOG_BARO_MSG, sizeof(log_BARO), \
       "BARO",  "Qffcf", "TimeUS,Alt,Press,Temp,CRt" }, \
+    { LOG_MY_MSG, sizeof(log_MYLOG), \
+      "MY_L", "Qh", "TimeUS,Pres"}, \
     { LOG_POWR_MSG, sizeof(log_POWR), \
       "POWR","QCCH","TimeUS,Vcc,VServo,Flags" },  \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
