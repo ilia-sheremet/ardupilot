@@ -53,6 +53,7 @@
 #include <AP_Camera.h>          // Photo or video camera
 #include <AP_Airspeed.h>
 #include <AP_Terrain.h>
+#include <AP_Humidity_HTU21D.h> //Humidity sensor
 
 #include <APM_OBC.h>
 #include <APM_Control.h>
@@ -185,6 +186,8 @@ private:
 
     AP_Baro barometer;
     Compass compass;
+
+    AP_Humidity_HTU21D humidity;
 
     AP_InertialSensor ins;
 
@@ -695,6 +698,9 @@ private:
     void Log_Write_IMU();
     void Log_Write_RC(void);
     void Log_Write_Baro(void);
+
+    void Log_Write_MyLog(void);
+
     void Log_Write_Airspeed(void);
     void Log_Read(uint16_t log_num, int16_t start_page, int16_t end_page);
     void start_logging();
@@ -804,6 +810,9 @@ private:
     void init_rangefinder(void);
     void read_rangefinder(void);
     void read_airspeed(void);
+
+    void read_humidity(void);
+
     void zero_airspeed(bool in_startup);
     void read_battery(void);
     void read_receiver_rssi(void);

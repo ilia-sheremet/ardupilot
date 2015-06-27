@@ -17,6 +17,7 @@
 #include "../AP_Airspeed/AP_Airspeed.h"
 #include "../AP_BattMonitor/AP_BattMonitor.h"
 #include <stdint.h>
+#include <AP_Humidity_HTU21D.h> //Humidity sensor
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_PX4
 #include <uORB/topics/esc_status.h>
@@ -72,6 +73,9 @@ public:
     void Log_Write_RCIN(void);
     void Log_Write_RCOUT(void);
     void Log_Write_Baro(AP_Baro &baro);
+
+    void Log_Write_My_log(AP_Humidity_HTU21D &humid);
+
     void Log_Write_Power(void);
     void Log_Write_AHRS2(AP_AHRS &ahrs);
     void Log_Write_POS(AP_AHRS &ahrs);
@@ -286,6 +290,12 @@ struct PACKED log_BARO {
     float   pressure;
     int16_t temperature;
     float   climbrate;
+};
+
+struct PACKED log_MYLOG {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float   humidity;
 };
 
 struct PACKED log_AHRS {
@@ -630,6 +640,8 @@ Format characters in the format string for binary log messages
       "RCOU",  "Qhhhhhhhhhhhh",     "TimeUS,Ch1,Ch2,Ch3,Ch4,Ch5,Ch6,Ch7,Ch8,Ch9,Ch10,Ch11,Ch12" }, \
     { LOG_BARO_MSG, sizeof(log_BARO), \
       "BARO",  "Qffcf", "TimeUS,Alt,Press,Temp,CRt" }, \
+    { LOG_MY_MSG, sizeof(log_MYLOG), \
+      "HUMI", "Qf", "TimeUS,Humidity"}, \
     { LOG_POWR_MSG, sizeof(log_POWR), \
       "POWR","QCCH","TimeUS,Vcc,VServo,Flags" },  \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
@@ -802,6 +814,7 @@ Format characters in the format string for binary log messages
 #define LOG_IMUDT_MSG     184
 #define LOG_IMUDT2_MSG    185
 #define LOG_IMUDT3_MSG    186
+#define LOG_MY_MSG        191  // new added humidity log
 
 // message types 200 to 210 reversed for GPS driver use
 // message types 211 to 220 reversed for autotune use

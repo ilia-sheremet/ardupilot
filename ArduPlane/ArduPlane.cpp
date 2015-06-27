@@ -46,6 +46,7 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] PROGMEM = {
     { SCHED_TASK(navigate),               5,   3000 },
     { SCHED_TASK(update_compass),         5,   1200 },
     { SCHED_TASK(read_airspeed),          5,   1200 },
+    { SCHED_TASK(read_humidity),          5,   1200 },  // my humidity task
     { SCHED_TASK(update_alt),             5,   3400 },
     { SCHED_TASK(adjust_altitude_target), 5,   1000 },
     { SCHED_TASK(obc_fs_check),           5,   1000 },
@@ -282,6 +283,8 @@ void Plane::one_second_loop()
 {
     if (should_log(MASK_LOG_CURRENT))
         Log_Write_Current();
+
+    //Log_Write_MyLog();
 
     // send a heartbeat
     gcs_send_message(MSG_HEARTBEAT);
@@ -778,6 +781,7 @@ void Plane::set_flight_stage(AP_SpdHgtControl::FlightStage fs)
 void Plane::update_alt()
 {
     barometer.update();
+
     if (should_log(MASK_LOG_IMU)) {
         Log_Write_Baro();
     }

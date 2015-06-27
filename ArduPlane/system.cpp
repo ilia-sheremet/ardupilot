@@ -175,6 +175,9 @@ void Plane::init_ardupilot()
     // initialise airspeed sensor
     airspeed.init();
 
+    // initialise the HTU21D humidity sensor
+    humidity.init();
+
     if (g.compass_enabled==true) {
         if (!compass.init() || !compass.read()) {
             cliSerial->println_P(PSTR("Compass initialisation failed!"));

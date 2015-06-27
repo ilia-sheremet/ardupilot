@@ -59,6 +59,19 @@ void Plane::read_airspeed(void)
     }
 }
 
+/*
+  ask HTU21D sensor for a new value
+ */
+void Plane::read_humidity(void)
+{
+	float my_humidity;
+	humidity.get_humidity(my_humidity);
+
+	hal.console->printf_P(PSTR("\n\n Dummy humidity = %.2f\n"), my_humidity); //_comments
+	Log_Write_MyLog();
+
+}
+
 void Plane::zero_airspeed(bool in_startup)
 {
     airspeed.calibrate(in_startup);
