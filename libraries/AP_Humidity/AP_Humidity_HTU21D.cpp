@@ -6,8 +6,12 @@
 
 extern const AP_HAL::HAL& hal;
 
-bool AP_Humidity_HTU21D::init(void){
-	uint8_t read_reg = HTU21DF_READREG;
+AP_Humidity_HTU21D::AP_Humidity_HTU21D(int bus, int address, const char* path):
+		I2C("Humidity", path, bus, address, 100000)
+{
+}
+
+int AP_Humidity_HTU21D::init(){
 
 	hal.console->printf_P(PSTR("\n Initializing HTU21DF Humidity sensor ... ")); //_comments
 
@@ -16,25 +20,28 @@ bool AP_Humidity_HTU21D::init(void){
 	if (i2c_sem == NULL) {
 	        hal.scheduler->panic(PSTR("AP_SerialBus_I2C did not get valid I2C semaphore!"));
 	    }
+    //, I haven't changed anything else apart from the parameter
+//	if (!i2c_sem->take(HAL_SEMAPHORE_BLOCK_FOREVER)) {
+//	        return false;
+//	    }
 
-	if (!i2c_sem->take(HAL_SEMAPHORE_BLOCK_FOREVER)) {
-	        return false;
-	    }
-
-//	if (!i2c_sem->take(400)){
-//		hal.scheduler->panic(PSTR("PANIC: AP_Humidity_HTU21D: failed to take serial semaphore for init"));
-//	}
+	if (!i2c_sem->take(200)){
+		hal.scheduler->panic(PSTR("PANIC: AP_Humidity_HTU21D: failed to take serial semaphore for init"));
+	}
 
 
-	uint8_t read_register = 0xE7, reset_register = 0xFE, read_hum = 0xE5, a;
+	uint8_t read_register = 0xE7, reset_register = 0xFE, read_hum = 0xE5, a, val;
 
-	a = hal.i2c->write(HTU21DF_I2CADDR, 1, &reset_register); //
-	hal.console->printf_P(PSTR("\nA = %u\n"), a); //_comments
-	hal.scheduler->delay(30);
 
-	a = hal.i2c->write(HTU21DF_I2CADDR, 1, &read_register);
-	hal.console->printf_P(PSTR("\nA2 = %u\n"), a); //_comments
-	hal.scheduler->delay(15);
+	a = device::I2C::transfer(&reset_register, 1, nullptr, 0);
+//	hal.console->printf_P(PSTR("\nA = %u\n"), a); //_comments
+//	hal.scheduler->delay(30);
+
+//	a = transfer(&read_register, 1, nullptr, 0);
+//	hal.console->printf_P(PSTR("\nA2 = %u\n"), a); //_comments
+//	hal.scheduler->delay(15);
+//
+//	a = transfer(nullptr, 0, &val, 1);
 
 	uint8_t buf[3];
 //	if (hal.i2c->readRegisters(HTU21DF_I2CADDR, HTU21DF_READREG, sizeof(buf), buf) == 0)
@@ -158,3 +165,5 @@ bool AP_Humidity_HTU21D::get_humidity(float &humidity)
 
     return true;
 }
+
+
