@@ -53,6 +53,7 @@
 #include <AP_Camera.h>          // Photo or video camera
 #include <AP_Airspeed.h>
 #include <AP_Terrain.h>
+#include <AP_Humidity_PX4.h>
 
 #include <APM_OBC.h>
 #include <APM_Control.h>
@@ -103,6 +104,15 @@
 #include <AP_HAL_Linux.h>
 #include <AP_HAL_Empty.h>
 #include <AP_HAL_VRBRAIN.h>
+
+#include <drivers/drv_humidity.h>
+#include <drivers/drv_hrt.h>
+#include <drivers/drv_range_finder.h>
+#include <drivers/device/ringbuffer.h>
+#include <drivers/drv_device.h>
+
+#include <uORB/uORB.h>
+#include <uORB/topics/subsystem_info.h>
 
 /*
   a plane specific arming class
@@ -272,6 +282,9 @@ private:
     // Optical flow sensor
     OpticalFlow optflow;
 
+    //HTU21D humidity;
+    AP_Humidity_PX4 humidity;
+
     // Rally Ponints
     AP_Rally rally {ahrs};
 
@@ -378,6 +391,8 @@ private:
 
     // Airspeed Sensors
     AP_Airspeed airspeed {aparm};
+
+
 
     // ACRO controller state
     struct {
@@ -696,6 +711,7 @@ private:
     void Log_Write_RC(void);
     void Log_Write_Baro(void);
     void Log_Write_Airspeed(void);
+    void Log_Write_Humidity(void);
     void Log_Read(uint16_t log_num, int16_t start_page, int16_t end_page);
     void start_logging();
     void load_parameters(void);
@@ -804,6 +820,7 @@ private:
     void init_rangefinder(void);
     void read_rangefinder(void);
     void read_airspeed(void);
+    void read_humidity(void);
     void zero_airspeed(bool in_startup);
     void read_battery(void);
     void read_receiver_rssi(void);
@@ -922,6 +939,7 @@ private:
     void log_init();
     uint32_t millis() const;
     uint32_t micros() const;
+    void hdtu21_init();
 
 public:
     void mavlink_delay_cb();

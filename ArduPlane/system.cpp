@@ -276,6 +276,9 @@ void Plane::startup_ground(void)
     //
     startup_INS_ground();
 
+    //Startup HUMIDITY
+    hdtu21_init();
+
     // read the radio to set trims
     // ---------------------------
     if (g.trim_rc_at_start != 0) {
@@ -795,4 +798,16 @@ uint32_t Plane::millis(void) const
 uint32_t Plane::micros(void) const
 {
     return hal.scheduler->micros();
+}
+
+void Plane::hdtu21_init()
+{
+	if (humidity.init() == true)
+	{
+		gcs_send_text_P(SEVERITY_MEDIUM, PSTR("\n\nHumidity sensor has started ...\n\n"));
+	}
+	else
+	{
+	gcs_send_text_P(SEVERITY_MEDIUM, PSTR("\n\nHumidity sensor \n\n"));
+	}
 }

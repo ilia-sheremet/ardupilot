@@ -14,12 +14,15 @@
 #include <AP_Baro.h>
 #include <AP_AHRS.h>
 #include <AP_Vehicle.h>
+#include <AP_Humidity_PX4.h>
 #include "../AP_Airspeed/AP_Airspeed.h"
 #include "../AP_BattMonitor/AP_BattMonitor.h"
 #include <stdint.h>
 
+
 #if CONFIG_HAL_BOARD == HAL_BOARD_PX4
 #include <uORB/topics/esc_status.h>
+#include <uORB/topics/humidity.h>
 #endif
 
 
@@ -85,6 +88,7 @@ public:
     void Log_Write_Camera(const AP_AHRS &ahrs, const AP_GPS &gps, const Location &current_loc);
     void Log_Write_ESC(void);
     void Log_Write_Airspeed(AP_Airspeed &airspeed);
+    void Log_Write_Humidity(AP_Humidity_PX4 &humidity);
     void Log_Write_Attitude(AP_AHRS &ahrs, const Vector3f &targets);
     void Log_Write_Current(const AP_BattMonitor &battery, int16_t throttle);
     void Log_Write_Compass(const Compass &compass);
@@ -575,6 +579,13 @@ struct PACKED log_AIRSPEED {
     float   offset;
 };
 
+struct PACKED log_HUMIDITY {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float    humidity;
+    float    temperature;
+};
+
 struct PACKED log_ACCEL {
     LOG_PACKET_HEADER;
     uint64_t time_us;
@@ -630,6 +641,8 @@ Format characters in the format string for binary log messages
       "RCOU",  "Qhhhhhhhhhhhh",     "TimeUS,Ch1,Ch2,Ch3,Ch4,Ch5,Ch6,Ch7,Ch8,Ch9,Ch10,Ch11,Ch12" }, \
     { LOG_BARO_MSG, sizeof(log_BARO), \
       "BARO",  "Qffcf", "TimeUS,Alt,Press,Temp,CRt" }, \
+    { LOG_HUMIDITY_MSG, sizeof(log_HUMIDITY), \
+       "HMDT",  "Qff",   "TimeUS,Humidity,Temp" }, \
     { LOG_POWR_MSG, sizeof(log_POWR), \
       "POWR","QCCH","TimeUS,Vcc,VServo,Flags" },  \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
@@ -802,6 +815,7 @@ Format characters in the format string for binary log messages
 #define LOG_IMUDT_MSG     184
 #define LOG_IMUDT2_MSG    185
 #define LOG_IMUDT3_MSG    186
+#define LOG_HUMIDITY_MSG  187
 
 // message types 200 to 210 reversed for GPS driver use
 // message types 211 to 220 reversed for autotune use

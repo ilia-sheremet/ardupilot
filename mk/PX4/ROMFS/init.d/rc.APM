@@ -359,6 +359,12 @@ then
     echo "Found px4flow sensor"
 fi
 
+# optional htu21d sensor
+if htu21d start
+then
+    echo "Found htu21d sensor"
+fi
+
 # optional PWM input driver
 if pwm_input start
 then

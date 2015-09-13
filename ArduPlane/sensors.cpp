@@ -59,6 +59,19 @@ void Plane::read_airspeed(void)
     }
 }
 
+void Plane::read_humidity(void)
+{
+    humidity.update();
+    Log_Write_Humidity();
+
+//    cliSerial->printf_P(PSTR("\n\n HUMIDITY = : %f\n"),
+//                        humidity.get_htdu21d_humidity);
+
+    cliSerial->printf_P(PSTR("\n\nHUM: %u\n"),
+    		             (uint16_t)humidity.get_htdu21d_humidity());
+
+}
+
 void Plane::zero_airspeed(bool in_startup)
 {
     airspeed.calibrate(in_startup);

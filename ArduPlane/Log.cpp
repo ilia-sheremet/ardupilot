@@ -472,6 +472,12 @@ void Plane::Log_Write_Airspeed(void)
     DataFlash.Log_Write_Airspeed(airspeed);
 }
 
+// Write a Humidity
+void Plane::Log_Write_Humidity(void)
+{
+    DataFlash.Log_Write_Humidity(humidity);
+}
+
 static const struct LogStructure log_structure[] PROGMEM = {
     LOG_COMMON_STRUCTURES,
     { LOG_PERFORMANCE_MSG, sizeof(log_Performance), 

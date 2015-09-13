@@ -1404,6 +1404,48 @@ void DataFlash_Class::Log_Write_ESC(void)
 #endif // CONFIG_HAL_BOARD
 }
 
+
+void DataFlash_Class::Log_Write_Humidity(AP_Humidity_PX4 &humidity1)
+{
+    /* TODO check do I need it
+    float temperature;
+    if (!humidity.get_temperature(temperature)) {
+        temperature = 0;
+    }
+    */
+    static int _hum_sub = -1;
+    struct humidity_s humidity_msg;
+
+    if (_hum_sub == -1) {
+        // subscribe to ORB topic on first call
+        _hum_sub = orb_subscribe(ORB_ID(humidity));
+    }
+
+    // check for new ESC status data
+    bool hum_updated = false;
+    orb_check(_hum_sub, &hum_updated);
+    if (hum_updated && (OK == orb_copy(ORB_ID(humidity), _hum_sub, &humidity_msg)))
+    {
+
+    struct log_HUMIDITY pkt = {
+        LOG_PACKET_HEADER_INIT(LOG_HUMIDITY_MSG),
+        time_us       : hal.scheduler->micros64(),
+        humidity      : (int16_t) humidity_msg.humidity_percent,
+        temperature   : (int16_t) humidity_msg.hum_temperature_celsius
+    };
+    WriteBlock(&pkt, sizeof(pkt));
+    }
+}
+
+//struct log_HUMIDITY pkt = {
+//    LOG_PACKET_HEADER_INIT(LOG_HUMIDITY_MSG),
+//    time_us       : hal.scheduler->micros64(),
+//    humidity      : (int16_t) humidity.get_htdu21d_humidity(),
+//    temperature   : (int16_t) humidity.get_htdu21d_temperature()
+//};
+//WriteBlock(&pkt, sizeof(pkt));
+//}
+
 // Write a AIRSPEED packet
 void DataFlash_Class::Log_Write_Airspeed(AP_Airspeed &airspeed)
 {
@@ -1422,6 +1464,7 @@ void DataFlash_Class::Log_Write_Airspeed(AP_Airspeed &airspeed)
     };
     WriteBlock(&pkt, sizeof(pkt));
 }
+
 
 // Write a Yaw PID packet
 void DataFlash_Class::Log_Write_PID(uint8_t msg_type, const PID_Info &info)

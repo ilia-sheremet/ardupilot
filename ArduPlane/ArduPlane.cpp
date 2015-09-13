@@ -74,6 +74,7 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] PROGMEM = {
     { SCHED_TASK(frsky_telemetry_send),  10,    100 },
 #endif
     { SCHED_TASK(terrain_update),         5,    500 },
+    { SCHED_TASK(read_humidity),          5,    500 },
 };
 
 void Plane::setup() 
