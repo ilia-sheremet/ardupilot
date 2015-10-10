@@ -27,6 +27,14 @@ static void read_rangefinder(void)
 }
 
 /*
+  log humidity
+ */
+static void read_humidity(void)
+{
+    DataFlash.Log_Write_Humidity();
+}
+
+/*
   ask airspeed sensor for a new value
  */
 static void read_airspeed(void)

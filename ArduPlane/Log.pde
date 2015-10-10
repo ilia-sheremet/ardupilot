@@ -537,10 +537,11 @@ static void Log_Write_Control_Tuning() {}
 static void Log_Write_GPS(uint8_t instance) {}
 static void Log_Write_IMU() {}
 static void Log_Write_RC() {}
-static void Log_Write_Airspeed(void) {}
+static void Log_Write_Airspeed(void) {}Log_Write_Sonar
 static void Log_Write_Baro(void) {}
 static void Log_Write_Status() {}
 static void Log_Write_Sonar() {}
+static void Log_Write_Humidity() {}
 #if OPTFLOW == ENABLED
 static void Log_Write_Optflow() {}
 #endif

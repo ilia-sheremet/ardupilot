@@ -15,6 +15,7 @@
 #include "../AP_Airspeed/AP_Airspeed.h"
 #include "../AP_BattMonitor/AP_BattMonitor.h"
 #include <stdint.h>
+#include <uORB/topics/humidity.h>
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_PX4
 #include <uORB/topics/esc_status.h>
@@ -83,6 +84,7 @@ public:
 	void Log_Write_Current(const AP_BattMonitor &battery, int16_t throttle);
     void Log_Write_Compass(const Compass &compass);
     void Log_Write_Mode(uint8_t mode);
+    void Log_Write_Humidity(void);
 
     bool logging_started(void) const { return log_write_started; }
 
@@ -542,6 +544,13 @@ struct PACKED log_GYRO {
     float GyrX, GyrY, GyrZ;
 };
 
+struct PACKED log_HUMIDITY {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float    humidity;
+    float    temperature;
+};
+
 /*
 Format characters in the format string for binary log messages
   b   : int8_t
@@ -585,6 +594,8 @@ Format characters in the format string for binary log messages
       "BAR2",  "Iffcf", "TimeMS,Alt,Press,Temp,CRt" }, \
     { LOG_POWR_MSG, sizeof(log_POWR), \
       "POWR","ICCH","TimeMS,Vcc,VServo,Flags" },  \
+    { LOG_HUMIDITY_MSG, sizeof(log_HUMIDITY), \
+      "HMDT",  "Qff",   "TimeUS,Humidity,Temp" }, \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
       "CMD", "IHHHfffffff","TimeMS,CTot,CNum,CId,Prm1,Prm2,Prm3,Prm4,Lat,Lng,Alt" }, \
     { LOG_RADIO_MSG, sizeof(log_Radio), \
@@ -729,6 +740,7 @@ Format characters in the format string for binary log messages
 #define LOG_GYR2_MSG      176
 #define LOG_GYR3_MSG      177
 #define LOG_POS_MSG       178
+#define LOG_HUMIDITY_MSG  187
 
 // message types 200 to 210 reversed for GPS driver use
 // message types 211 to 220 reversed for autotune use

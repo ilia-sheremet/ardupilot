@@ -788,13 +788,14 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
     { barometer_accumulate,   1,    900 },
     { update_notify,          1,    300 },
     { read_rangefinder,       1,    500 },
+    { read_humidity,          1,    500 },
 #if OPTFLOW == ENABLED
     { update_optical_flow,    1,    500 },
 #endif
     { one_second_loop,       50,   1000 },
     { check_long_failsafe,   15,   1000 },
     { read_receiver_rssi,     5,   1000 },
-    { airspeed_ratio_update, 50,   1000 }, // 30
+    { airspeed_ratio_update, 50,   1000 }, 
     { update_mount,           1,   1500 },
     { log_perf_info,        500,   1000 },
     { compass_save,        3000,   2500 },
